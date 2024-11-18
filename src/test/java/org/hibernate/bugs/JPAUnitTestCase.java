@@ -104,6 +104,9 @@ class JPAUnitTestCase {
 	 * calling it.
 	 */
 	private void clearEntityManagerStrategy(EntityManager entityManager, Account accountToRemove) {
+		entityManager.clear();
+		
+		accountToRemove = entityManager.merge(accountToRemove);
 		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 		CriteriaDelete<AccessToken> deleteStmt = cb.createCriteriaDelete(AccessToken.class);
 		Root<AccessToken> root = deleteStmt.from(AccessToken.class);
@@ -111,7 +114,6 @@ class JPAUnitTestCase {
 		entityManager.createQuery(deleteStmt).executeUpdate();
 
 		entityManager.remove(accountToRemove);
-		entityManager.clear();
 	}
 
 	@Test
